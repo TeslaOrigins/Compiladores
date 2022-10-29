@@ -1,0 +1,223 @@
+Package sarapatel;
+
+Helpers
+ digito = ['0' .. '9'];
+ caractere = (['a' .. 'z'] | ['A' .. 'Z']);
+ espaco = ' ';
+ underline = '_';
+ chaves_esq = '{';
+ chaves_dir = '}';
+ rc = 13;
+ nl = 10;
+ comentario_corpo = ([ 0 .. 124] | [126 .. 0xffff]);
+ comentario_linha_corpo = ([ 0 .. 9] | [11 .. 0xffff]);
+ aspa_simples = 39;
+ all = [0 .. 0xffff];
+ string_corpo = ([0 .. 38] | [40 .. 0xffff]);
+ binario = ('0b')('0' | '1')+;
+ 
+Tokens
+ comentario_linha = '--' (comentario_linha_corpo)* 10;
+ comentario = (chaves_esq)(comentario_corpo)*(chaves_dir);
+ num_decimal = (digito+);
+ num_real = (digito+)','(digito+);
+ num_binario = (binario);
+ soma = '+';
+ menos = '-';
+ mult = '*';
+ div = '/';
+ igualdade = '=';
+ mod = '%';
+ separador = '|';
+ maior_igual = '>=';
+ maior = '>';
+ tipo_base = 'inteiro' | 'booleano' | 'real' | 'cadeia'; 
+ ponto_entrada = '>>';
+ comece = 'comece';
+ termine = 'termine';
+ se = 'se';
+ senao = 'senao';
+ entao = 'entao';
+ ou = 'ou';
+ negacao = 'nao';
+ enquanto = 'enquanto';
+ e = 'e';
+ verdadeiro = 'verdade';
+ falso = 'falso';
+ fecha_linha = ';';
+ atribuicao = '<<'; 
+ par_esq = '(';
+ par_dir = ')';
+ dois_pontos = ':';
+ decl_var = 'var';
+ decl_const = 'const';
+ colchete_esq = '[';
+ colchete_dir = ']'; 
+ funcao = 'funcao';
+ procedimento = 'procedimento';
+ string = (aspa_simples)(string_corpo)*(aspa_simples);
+ identificador = (caractere | underline)(caractere | underline | digito)*;
+ vazio = (espaco | rc | nl | 9)+;  
+ 
+Ignored Tokens
+ vazio;
+
+Productions  
+	programa = inicio_programa fim_programa+;
+ 
+	inicio_programa = {vazio}  
+	 				| {declaracao_var} inicio_programa dec_var 
+	 				| {declaracao_const} inicio_programa dec_cons;
+ 
+	fim_programa = {procedimento}  dec_procedimento 
+ 				 | {funcao}  dec_funcao;
+ 
+	dec_var = decl_var dois_pontos tipo identificador_com_ou_sem_atribuicao fecha_linha;
+ 	
+ 	dec_cons = decl_const dois_pontos tipo id_atribuicao fecha_linha;
+ 	
+	identificador_com_ou_sem_atribuicao = {id} identificador 
+										| {atribuicao} id_atribuicao;
+ 
+	tipo  = {base} tipo_base 
+		  | {array} tipo colchete_esq exp colchete_dir;
+ 
+	id_atribuicao = identificador atribuicao exp;
+ 	
+ 	array_comp = colchete_esq identificador separador exp colchete_dir;
+	
+	dec_procedimento = ponto_entrada_null procedimento dois_pontos identificador par_esq parametros par_dir comando;
+ 
+ 	ponto_entrada_null  = {null}
+						| {entrada} ponto_entrada;
+ 
+    dec_funcao = funcao dois_pontos tipo identificador par_esq parametros par_dir exp;
+ 	
+ 	
+	parametros  = {param} parametro fecho_parametros 
+				| {vazio};
+ 
+	fecho_parametros = {vazio} 
+					 | {param} fecho_parametros separador parametro;
+ 
+	parametro = tipo_parametro identificador;
+ 
+  	tipo_parametro  = {tipo} tipo_base 
+					| {matriz} tipo_parametro colchete_esq colchete_dir;
+ 
+	comando = {se_casado} se_casamento
+			| {se_nao_casado}se_sem_casamento;
+			
+	se_casamento = {se_senao} se par_esq exp par_dir [primeiro_se]: se_casamento senao [segundo_se]:se_casamento 
+				 | {enquanto} enquanto par_esq exp par_dir se_casamento
+				 | {comandos} comando_alternativo;
+			 
+	se_sem_casamento = {se_comando} se par_esq exp par_dir comando_alternativo
+				     | {se_sem_casamento} se par_esq exp par_dir se_sem_casamento
+					 | {enquanto} enquanto par_esq exp par_dir se_sem_casamento
+					 | {se_senao_sem_casamento} se par_esq exp par_dir se_casamento senao se_sem_casamento;
+						
+	comando_alternativo =  {atribuicao} id_atribuicao fecha_linha
+						| {chamada_proc} chamada_procedimento fecha_linha
+						| {bloco} bloco_comandos;
+ 	
+	bloco_comandos = comece dec_var_cons* comando* termine;
+	
+	dec_var_cons = {declaracao_variavel} dec_var 
+			 	 | {declaracao_constante} dec_cons;
+			 	 
+	valor = {real} num_real
+		  | {decimal} num_decimal
+    	  | {num_binario} num_binario
+    	  | {string} string
+		  | {id} identificador 
+		  | {array} valor colchete_esq exp colchete_dir;
+ 		
+	
+ 	/* 
+ 		expressoes com exp a direita
+ 		bloco expressoes
+ 	*/		
+ 	exp = {bloco} bloco_expressoes
+ 		| {booleano} exp_booleano_ou;
+ 	/* 
+ 		exp = exp
+ 		exp >= exp
+ 		exp > exp
+ 		nao exp
+ 		exp e exp
+ 		exp ou exp
+ 	*/			
+	exp_booleano_ou = {exp_soma} exp_booleano_e
+					| {booleano_ou} exp_booleano_ou ou exp_booleano_e;	
+					
+	exp_booleano_e = {exp_booleano_negacao} exp_negacao
+				   | {booleano_e} exp_booleano_e e exp_negacao;	
+				   
+	exp_negacao = {exp_negacao} negacao exp_negacao
+				| {exp_booleano_cmp_maior} exp_booleano_cmp_maior;
+					   
+	exp_booleano_cmp_maior  = {exp_booleano_cmp_maior_igual} exp_booleano_cmp_maior_igual
+							| {comparacao_maior} exp_booleano_cmp_maior maior exp_booleano_cmp_maior_igual;
+	
+	exp_booleano_cmp_maior_igual =  {exp_maior} exp_booleano_cmp_igual
+				 				 | {comparacao_maior_igual} exp_booleano_cmp_maior_igual maior_igual exp_booleano_cmp_igual;
+				 
+				 
+	exp_booleano_cmp_igual  = {exp_maior_igual} exp_op_soma
+				 			| {comparacao_igualdade} exp_booleano_cmp_igual igualdade exp_op_soma;
+				
+					 		 
+	/* 
+		exp + exp
+	 */	
+	exp_op_soma = {op2} exp_subtracao
+				| {soma} exp_op_soma soma exp_subtracao;
+	
+	
+	/*  
+		exp - exp 
+	*/		
+	exp_subtracao = {menos_subtracao} exp_subtracao menos exp_op_mult
+						| {exp_op_mult} exp_op_mult;
+	/*  
+		exp * exp
+		exp / exp
+		exp % exp
+	*/		
+	exp_op_mult = {exp_val} exp_ternario
+				| {multiplicacao} exp_op_mult mult exp_ternario
+				| {divisao} exp_op_mult div exp_ternario
+				| {resto} exp_op_mult mod exp_ternario ;
+				
+	/*  
+		
+	*/	
+	exp_ternario = {ternario} se par_esq [condicao]: exp par_dir [valor_se_verdadeiro]: exp senao [valor_se_falso]: exp_negativo
+			 	 | {exp_val} exp_negativo;
+			 	 
+	exp_negativo = {exp_negativo} menos exp_negativo
+				 | {exp_val} exp_val;
+				 
+	exp_val = {array} array_comp
+			| {parentese} par_esq exp par_dir
+	 		| {tipo_base} tipo_base
+		    | {funcao} chamada_funcao
+			| {valor} valor;
+	
+	bloco_expressoes = comece dec_cons* exp termine;
+	
+	chamada_funcao = identificador par_esq lista_exp par_dir;
+ 	
+ 	chamada_procedimento = identificador par_esq lista_exp par_dir;
+	
+	lista_exp = {conteudo_lista} exp separador_lista_exp
+			  | {lista_vazia};
+
+	separador_lista_exp  = {lista_exp} separador_lista_exp separador exp
+						| {vazio};
+
+ 
+	
+ 
+	

@@ -1,0 +1,10 @@
+>> procedimento: principal()
+comece
+	var : inteiro nImpares;
+	var : inteiro[nImpares] impares << [ i |  (0b10*i)+0b01] ;
+    imprima('Insira quantos números ímpares voce gostaria de gerar:\n');
+    
+    leia(nImpares);
+    
+    imprima(impares);
+termine

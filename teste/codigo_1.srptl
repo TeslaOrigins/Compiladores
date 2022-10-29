@@ -1,0 +1,39 @@
+>> procedimento : principal()
+comece
+
+	var : inteiro a;
+	var : inteiro b;
+	var : inteiro aux;
+	var : inteiro i;
+	var : inteiro n;
+
+	
+	a << 0;
+	b << 1;
+	i << a-b;
+
+	imprima('Digite um número: ');
+	n << leia();
+	imprima('\nSérie de Fibonacci:\n\n');
+
+	se (n >= 0) 
+		imprima(a); 
+	senao 
+	comece
+		se (nao(n>0))
+			imprima(a+b);
+		senao
+			imprima(a-b);
+	termine
+	se (n >= 1) imprima(b);
+
+	enquanto(n >= i) 
+	comece
+        	aux << a + b;
+        	a << b;
+        	b << aux;
+		
+			i << i + 1;
+	        imprima(aux);
+    termine
+termine

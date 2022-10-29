@@ -1,0 +1,30 @@
+-- Algoritmo de ordenacao de ordenacao bubbleSort.
+
+funcao: cadeia ordenacao(inteiro[] vetor | inteiro n) 
+	comece
+		 k<<0;
+		 
+		 enquanto ((n-1) > k;) 
+			comece
+				j<<k+1;
+				enquanto (n>j) 
+					comece
+						se (vetor[k]>=vetor[j])
+						comece
+							aux << vetor[k];
+							vetor[k] << vetor[j];
+							vetor[j] << aux;	
+						termine
+						j << j+1;
+					termine
+				imprima(vetor)
+				k << k+1;
+			termine
+		vetor
+	termine
+	
+>> procedimento: principal
+	comece
+		var: inteiro[10] vetor << [2|1|6|9|11|8|0|3|5|4] ;
+		ordenacao(vetor | size(vetor) | 0 | 0 | 0)		
+	termine

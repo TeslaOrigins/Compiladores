@@ -1,0 +1,23 @@
+funcao: booleano eh_par(inteiro numero)
+comece
+	--operador se ternário
+	se (numero%2=0)
+		verdade
+	senao
+		falso
+termine
+
+>> procedimento main()
+comece
+	int numero << 5;
+	
+	se(eh_par(numero))
+	comece
+		ok
+	termine
+	senao
+	comece
+		not ok
+	termine
+termine
+ 
