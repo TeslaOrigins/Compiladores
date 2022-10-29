@@ -22,5 +22,4 @@ public class Tabela extends DepthFirstAdapter
 	public void setPilha(Stack<UnidadeTabela> pilha) {
 		this.pilha = pilha;
 	}
-	
 }
