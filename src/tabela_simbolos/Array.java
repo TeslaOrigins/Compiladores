@@ -1,30 +1,26 @@
 package tabela_simbolos;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Array extends Tipo {
-	private ArrayList<Tipo> valor;
-	private ArrayList<Integer> tamanhos;
+	private List<Integer> tamanhos;
 	private int dimensao;
-
-	public Array(String tipoArray, ArrayList<Integer> tamanhos, int dimensao) {
+	public Array(String tipoArray, List<Integer> tamanhos, int dimensao) {
+		this.setTipo(tipoArray); 
+	}
+	public Array(String tipoArray) {
 		this.setTipo(tipoArray); 
 	}
 	
-	public ArrayList<Tipo> getValor() {
-		return valor;
-	}
-	public ArrayList<Integer> getTamanhos() {
+	public List<Integer> getTamanhos() {
 		return tamanhos;
 	}
 	public int getDimensao() {
 		return dimensao;
 	}
 
-	public void setValor(ArrayList<Tipo> valor) {
-		this.valor = valor;
-	}
-	public void setTamanhos(ArrayList<Integer> tamanhos) {
+
+	public void setTamanhos(List<Integer> tamanhos) {
 		this.tamanhos = tamanhos;
 	}
 	public void setDimensao(int dimensao) {
