@@ -12,9 +12,9 @@ comece
 	b << 1;
 	i << a-b;
 
-	imprima('Digite um número: ');
+	imprima('Digite um numero: ');
 	n << leia();
-	imprima('\nSérie de Fibonacci:\n\n');
+	imprima('\nSerie de Fibonacci:\n\n');
 
 	se (n >= 0) 
 		imprima(a); 

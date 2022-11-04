@@ -1,11 +1,6 @@
 package tabela_simbolos;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UnidadeTabela {
 	private Hashtable<String,Tipo> identificadores;
@@ -16,7 +11,8 @@ public class UnidadeTabela {
 		Tipo t;
 		//Se for aray
 		if(tipo == null) {
-			t = null;
+			t = new Procedimento();
+			this.identificadores.put(nome,t);
 		}else {
 			if(tipo.contains("[")) {
 				// dimensoes do array
@@ -32,33 +28,41 @@ public class UnidadeTabela {
 				
 				if(tipo.contains("inteiro")) {
 					t = new Array("arrayinteiro");
+					this.identificadores.put(nome,t);
 				}
 				if(tipo.contains("cadeia")) {
 					t = new Array("arraycadeia");
+					this.identificadores.put(nome,t);
 				}
 				if(tipo.contains("real")) {
 					t = new Array("arrayreal");
+					this.identificadores.put(nome,t);
 				}
 				if(tipo.contains("booleano")) {
 					t = new Array("arraybooleano");
+					this.identificadores.put(nome,t);
 				}
 			//se nao for array
 			}else {
 				if(tipo.contains("inteiro")) {
 					t = new Inteiro();
+					this.identificadores.put(nome,t);
 				}
 				if(tipo.contains("cadeia")) {
 					t = new Cadeia();
+					this.identificadores.put(nome,t);
 				}
 				if(tipo.contains("real")) {
 					t = new Real();
+					this.identificadores.put(nome,t);
 				}
 				if(tipo.contains("booleano")) {
 					t = new Booleano();
+					this.identificadores.put(nome,t);
 				}
 			}
 		}
-	
+		
 	}
 	public int countOccurences(
 			  String someString, char searchedChar, int index) {

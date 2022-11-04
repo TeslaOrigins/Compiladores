@@ -2,8 +2,7 @@
 
 funcao: cadeia ordenacao(inteiro[] vetor | inteiro n) 
 	comece
-		 k<<0;
-		 
+
 		 enquanto ((n-1) > k;) 
 			comece
 				j<<k+1;

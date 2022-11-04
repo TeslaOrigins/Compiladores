@@ -4,6 +4,7 @@ public abstract class Tipo {
 	private Boolean atribuido;
 	private String tipo;
 	private byte[] valor;
+	
 	public Boolean getAtribuido() {
 		return atribuido;
 	}	

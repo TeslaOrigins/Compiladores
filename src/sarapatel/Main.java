@@ -11,7 +11,7 @@ public class Main
  {
   try
   {
-   String arquivo = "teste/codigo_3.srptl";
+   String arquivo = "teste/codigo_1.srptl";
    Lexer lexer =
 			new Lexer(
 					new PushbackReader(  
